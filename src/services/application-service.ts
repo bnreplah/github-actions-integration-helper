@@ -151,7 +151,7 @@ export async function validateVeracodeApiCreds(inputs: Inputs): Promise<string |
     status: Checks.Status.Completed,
   };
   let host = appConfig.hostName.veracode.us;
-    if (vid.startsWith('vera01fi')) {
+  if (vid.startsWith('vera01fi')) {
     core.debug('FED prefix has been found');
     host = appConfig.hostName.veracode.fed;
     //vid = vid.split('-')[1] || '';  // Extract part after '-'
