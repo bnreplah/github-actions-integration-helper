@@ -1,4 +1,6 @@
 "use strict";
+
+
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -10,11 +12,15 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
 }));
+
+
 var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
     Object.defineProperty(o, "default", { enumerable: true, value: v });
 }) : function(o, v) {
     o["default"] = v;
 });
+
+
 var __importStar = (this && this.__importStar) || (function () {
     var ownKeys = function(o) {
         ownKeys = Object.getOwnPropertyNames || function (o) {
@@ -32,12 +38,16 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+
+
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.preparePolicyResults = preparePolicyResults;
 exports.postScanReport = postScanReport;
+
 const core = __importStar(require("@actions/core"));
 const rest_1 = require("@octokit/rest");
 const fs = __importStar(require("fs/promises"));
@@ -46,6 +56,7 @@ const Checks = __importStar(require("../namespaces/Checks"));
 const check_service_1 = require("./check-service");
 const app_config_1 = __importDefault(require("../app-config"));
 const http = __importStar(require("../api/http-request"));
+
 async function preparePolicyResults(inputs) {
     const octokit = new rest_1.Octokit({
         auth: inputs.token,

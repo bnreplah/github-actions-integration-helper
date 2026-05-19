@@ -42,12 +42,14 @@ const crypto = __importStar(require("crypto"));
 const authorizationScheme = 'VERACODE-HMAC-SHA-256';
 const requestVersion = 'vcode_request_version_1';
 const nonceSize = 16;
+
 function computeHashHex(message, key_hex) {
     const key_bits = sjcl_1.default.codec.hex.toBits(key_hex);
     const hmac_bits = new sjcl_1.default.misc.hmac(key_bits, sjcl_1.default.hash.sha256).mac(message);
     const hmac = sjcl_1.default.codec.hex.fromBits(hmac_bits);
     return hmac;
 }
+
 function calulateDataSignature(apiKeyBytes, nonceBytes, dateStamp, data) {
     const kNonce = computeHashHex(nonceBytes, apiKeyBytes);
     const kDate = computeHashHex(dateStamp, kNonce);
@@ -55,12 +57,15 @@ function calulateDataSignature(apiKeyBytes, nonceBytes, dateStamp, data) {
     const kFinal = computeHashHex(data, kSig);
     return kFinal;
 }
+
 function newNonce() {
     return crypto.randomBytes(nonceSize).toString('hex').toUpperCase();
 }
+
 function toHexBinary(input) {
     return sjcl_1.default.codec.hex.fromBits(sjcl_1.default.codec.utf8String.toBits(input));
 }
+
 function calculateAuthorizationHeader(params) {
     const uriString = params.url;
     const data = `id=${params.id}&host=${params.host}&url=${uriString}&method=${params.method}`;
