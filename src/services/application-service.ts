@@ -197,6 +197,7 @@ export async function validateVeracodeApiCreds(inputs: Inputs): Promise<string |
       queryAttribute: '',
       queryValue: '',
     };
+    core.debug(`resourceUri: ${resourceUri}`)
 
     const applicationResponse: VeracodeApplication.SelfUserResultsData =
       await http.getResourceByAttribute<VeracodeApplication.SelfUserResultsData>(inputs.vid, inputs.vkey, getSelfUserDetailsResource);
@@ -210,15 +211,15 @@ export async function validateVeracodeApiCreds(inputs: Inputs): Promise<string |
         start_line: 0,
         end_line: 0,
         annotation_level: 'failure',
-        title: 'Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.',
-        message: 'Please check the VERACODE_API_ID and VERACODE_API_KEY configured under the organization secrets.',
+        title: 'Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.',
+        message: `[Error] Please check the VERACODE_API_ID and VERACODE_API_KEY configured under the organization secrets or your veracode repository secrets.\n Host identified: ${host} `,
       });
       await updateChecks(
         octokit,
         checkStatic,
         Checks.Conclusion.Failure,
         annotations,
-        'Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.',
+        'Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.',
       );
       return;
     }
