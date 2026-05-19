@@ -8,6 +8,10 @@ import * as http from '../api/http-request';
 import { Inputs, vaildateApplicationProfileInput, vaildateRemoveSandboxInput } from '../inputs';
 import * as fs from 'fs/promises';
 
+/// Function: get application by name
+/***
+*
+*/
 export async function getApplicationByName(
   appname: string,
   vid: string,
