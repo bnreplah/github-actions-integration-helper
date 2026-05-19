@@ -135,6 +135,8 @@ async function getSandboxesByApplicationGuid(
 export async function validateVeracodeApiCreds(inputs: Inputs): Promise<string | void> {
   const annotations: Checks.Annotation[] = [];
   const repo = inputs.source_repository.split('/');
+  const vid = inputs.vid;
+  const vkey = inputs.vkey;
   const ownership = {
     owner: repo[0],
     repo: repo[1],
@@ -205,7 +207,8 @@ export async function validateVeracodeApiCreds(inputs: Inputs): Promise<string |
     if (applicationResponse && applicationResponse?.api_credentials?.expiration_ts) {
       core.info(`VERACODE_API_ID and VERACODE_API_KEY is valid, Credentials expiration date - ${JSON.stringify(applicationResponse.api_credentials.expiration_ts)}`);
     } else {
-      core.setFailed('Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY');
+      
+      core.setFailed('Unkown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY');
       annotations.push({
         path: '/',
         start_line: 0,
