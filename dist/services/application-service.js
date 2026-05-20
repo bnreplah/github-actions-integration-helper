@@ -280,7 +280,7 @@ async function validateVeracodeApiCreds(inputs) {
         }
         else {
             console.log('[DEBUG]: Ran into an issue with the id and key, unkown');
-            core.info('[DEBUG]: There was an issue with the formatting of the Veracode API ID and Key');
+            core.log('[DEBUG]: There was an issue with the formatting of the Veracode API ID and Key');
             core.setFailed('Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY');
             annotations.push({
                 path: '/',
