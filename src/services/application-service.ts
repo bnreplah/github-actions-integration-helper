@@ -8,6 +8,10 @@ import * as http from '../api/http-request';
 import { Inputs, vaildateApplicationProfileInput, vaildateRemoveSandboxInput } from '../inputs';
 import * as fs from 'fs/promises';
 
+/// Function: get application by name
+/***
+*
+*/
 export async function getApplicationByName(
   appname: string,
   vid: string,
@@ -135,6 +139,8 @@ async function getSandboxesByApplicationGuid(
 export async function validateVeracodeApiCreds(inputs: Inputs): Promise<string | void> {
   const annotations: Checks.Annotation[] = [];
   const repo = inputs.source_repository.split('/');
+  const vid = inputs.vid;
+  const vkey = inputs.vkey;
   const ownership = {
     owner: repo[0],
     repo: repo[1],
@@ -150,27 +156,32 @@ export async function validateVeracodeApiCreds(inputs: Inputs): Promise<string |
     check_run_id: inputs.check_run_id,
     status: Checks.Status.Completed,
   };
-  
-  
+
+  let host = appConfig.hostName.veracode.us;
   if (vid.startsWith('vera01fi')) {
-    console.log('FED prefix has been found');
+    core.debug('FED prefix has been found');
+
     host = appConfig.hostName.veracode.fed;
     //vid = vid.split('-')[1] || '';  // Extract part after '-'
     //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   else if (vid.startsWith('vera01ei')) {
     console.log('EU prefix has been sent');
+    core.debug('EU prefix has been sent');
+
     host = appConfig.hostName.veracode.eu;
     //vid = vid.split('-')[1] || '';  // Extract part after '-'
     //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   else (vid.startsWith('vera01')) {
+
     console.log('Unknown generic prefix found');
     host = appConfig.hostName.veracode.eu;
     //vid = vid.split('-')[1] || '';  // Extract part after '-'
     //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   console.log('Host: ', host);
+
   
   try {
     if (!inputs.vid || !inputs.vkey) {
@@ -197,6 +208,7 @@ export async function validateVeracodeApiCreds(inputs: Inputs): Promise<string |
       queryAttribute: '',
       queryValue: '',
     };
+    core.debug(`resourceUri: ${resourceUri}`)
 
     const applicationResponse: VeracodeApplication.SelfUserResultsData =
       await http.getResourceByAttribute<VeracodeApplication.SelfUserResultsData>(inputs.vid, inputs.vkey, getSelfUserDetailsResource);
@@ -207,20 +219,21 @@ export async function validateVeracodeApiCreds(inputs: Inputs): Promise<string |
     else {
       core.debug(`[DEBUG]: Host Identified: ${host}`);
       core.setFailed('Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY');
-      annotations.push({
+
         path: '/',
         start_line: 0,
         end_line: 0,
         annotation_level: 'failure',
         title: 'Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.',
         message: `[ERROR]: There was something that went wrong with your API ID and Key\nPlease check the VERACODE_API_ID and VERACODE_API_KEY configured under the veracode repository secrets, or your organization secrets.\nHost: ${host}`,
+
       });
       await updateChecks(
         octokit,
         checkStatic,
         Checks.Conclusion.Failure,
         annotations,
-        'Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.',
+        'Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.',
       );
       return;
     }

@@ -35,13 +35,16 @@ var __importStar = (this && this.__importStar) || (function () {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+
 Object.defineProperty(exports, "__esModule", { value: true });
+
 exports.getApplicationByName = getApplicationByName;
 exports.removeSandbox = removeSandbox;
 exports.validateVeracodeApiCreds = validateVeracodeApiCreds;
 exports.validatePolicyName = validatePolicyName;
 exports.registerBuild = registerBuild;
 exports.trimSandboxesFromApplicationProfile = trimSandboxesFromApplicationProfile;
+
 const core = __importStar(require("@actions/core"));
 const app_config_1 = __importDefault(require("../app-config"));
 const rest_1 = require("@octokit/rest");
@@ -50,6 +53,16 @@ const check_service_1 = require("./check-service");
 const http = __importStar(require("../api/http-request"));
 const inputs_1 = require("../inputs");
 const fs = __importStar(require("fs/promises"));
+
+/// Precondition: 
+/// Postcondition: 
+/**
+ * 
+ * @param {*} appname 
+ * @param {*} vid 
+ * @param {*} vkey 
+ * @returns 
+ */
 async function getApplicationByName(appname, vid, vkey) {
     var _a;
     try {
@@ -86,6 +99,14 @@ async function getApplicationByName(appname, vid, vkey) {
         throw error;
     }
 }
+
+/// Precondition: 
+/// Postcondition: 
+/**
+ * 
+ * @param {*} inputs 
+ * @returns 
+ */
 async function getAppGUIDByAppName(inputs) {
     if (!(0, inputs_1.vaildateApplicationProfileInput)(inputs)) {
         core.setFailed('Application Profile name is required.');
@@ -104,6 +125,14 @@ async function getAppGUIDByAppName(inputs) {
     const appGuid = application.guid;
     return appGuid;
 }
+
+/// Precondition: 
+/// Postcondition: 
+/**
+ * 
+ * @param {*} inputs 
+ * @returns 
+ */
 async function removeSandbox(inputs) {
     if (!(0, inputs_1.vaildateRemoveSandboxInput)(inputs)) {
         core.setFailed('sandboxname is required.');
@@ -137,6 +166,16 @@ async function removeSandbox(inputs) {
         core.setFailed(`Error removing sandbox ${sandboxName}`);
     }
 }
+
+/// Precondition: 
+/// Postcondition: 
+/**
+ * 
+ * @param {*} appGuid 
+ * @param {*} vid 
+ * @param {*} vkey 
+ * @returns 
+ */
 async function getSandboxesByApplicationGuid(appGuid, vid, vkey) {
     var _a;
     try {
@@ -156,6 +195,7 @@ async function getSandboxesByApplicationGuid(appGuid, vid, vkey) {
 
 
 async function validateVeracodeApiCreds(inputs) {
+
     var _a, _b;
     const debug = inputs.debug;
     const annotations = [];
@@ -174,7 +214,7 @@ async function validateVeracodeApiCreds(inputs) {
         check_run_id: inputs.check_run_id,
         status: Checks.Status.Completed,
     };
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     if (debug){
         console.log('[Debug]: ValidateVeracodeAPICredentials ');
         console.log('[DEBUG]: on ');
@@ -183,11 +223,13 @@ async function validateVeracodeApiCreds(inputs) {
 
     try {
         if (!inputs.vid || !inputs.vkey) {
-            if (!inputs.vid){
-                console.log('Issue with the VID');
+
+            if( !inputs.vid ){
+                console.log('Issue with VID');
             }
-            if(!inputs.vkey){
-                console.log('Issue with the VKEY');
+            if (!inputs.vkey) {
+                console.log('Issue with VKEY');
+
             }
             core.setFailed('Missing VERACODE_API_ID / VERACODE_API_KEY secret key.');
             annotations.push({
@@ -201,6 +243,7 @@ async function validateVeracodeApiCreds(inputs) {
             await (0, check_service_1.updateChecks)(octokit, checkStatic, Checks.Conclusion.Failure, annotations, 'Missing VERACODE_API_ID / VERACODE_API_KEY secret key.');
             return;
         }
+
         if (inputs.vid.startsWith('vera01ei')) {
             console.log('EU Instance' , app_config_1.default.hostName.veracode.eu );
             host = app_config_1.default.hostName.veracode.eu;
@@ -220,6 +263,7 @@ async function validateVeracodeApiCreds(inputs) {
         //     vkey = vkey.split('-')[1] || '';
         // }
         console.log('[DEBUG] ResourceURI: selfUserUri ', appConfig.api.veracode.selfUserUri);
+
         const getSelfUserDetailsResource = {
             resourceUri: appConfig.api.veracode.selfUserUri,
             queryAttribute: '',
@@ -257,6 +301,12 @@ async function validateVeracodeApiCreds(inputs) {
         throw error;
     }
 }
+
+/**
+ * 
+ * @param {*} inputs 
+ * @returns 
+ */
 async function validatePolicyName(inputs) {
     var _a, _b;
     const annotations = [];
@@ -326,6 +376,11 @@ async function validatePolicyName(inputs) {
         throw error;
     }
 }
+
+/**
+ * 
+ * @param {*} inputs 
+ */
 async function registerBuild(inputs) {
     var _a;
     const filePath = 'workflow-metadata.json';
@@ -364,6 +419,12 @@ async function registerBuild(inputs) {
         core.info(`Error while creating the ${artifactName} artifact ${error}`);
     }
 }
+
+/**
+ * 
+ * @param {*} inputs 
+ * @returns 
+ */
 async function trimSandboxesFromApplicationProfile(inputs) {
     const appGuid = await getAppGUIDByAppName(inputs);
     const appname = inputs.appname;
