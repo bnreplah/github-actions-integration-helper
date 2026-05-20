@@ -193,26 +193,14 @@ async function getSandboxesByApplicationGuid(appGuid, vid, vkey) {
     }
 }
 
-/// Precondition: 
-/// Postcondition: 
-/**
- * 
- * @param {
- *         debug,
- *         source_repository,
- *         token,
- *         check_run_id,
- *         vid,
- *         vkey
- *        } inputs 
- * @returns 
- */
+
 async function validateVeracodeApiCreds(inputs) {
 
     var _a, _b;
     const debug = inputs.debug;
     const annotations = [];
     const repo = inputs.source_repository.split('/');
+    let host;
     const ownership = {
         owner: repo[0],
         repo: repo[1],
@@ -226,7 +214,7 @@ async function validateVeracodeApiCreds(inputs) {
         check_run_id: inputs.check_run_id,
         status: Checks.Status.Completed,
     };
-    
+
     if (debug){
         console.log('[Debug]: ValidateVeracodeAPICredentials ');
         console.log('[DEBUG]: on ');
@@ -235,11 +223,13 @@ async function validateVeracodeApiCreds(inputs) {
 
     try {
         if (!inputs.vid || !inputs.vkey) {
+
             if( !inputs.vid ){
                 console.log('Issue with VID');
             }
             if (!inputs.vkey) {
                 console.log('Issue with VKEY');
+
             }
             core.setFailed('Missing VERACODE_API_ID / VERACODE_API_KEY secret key.');
             annotations.push({
@@ -254,16 +244,43 @@ async function validateVeracodeApiCreds(inputs) {
             return;
         }
 
+        if (inputs.vid.startsWith('vera01ei')) {
+            console.log('EU Instance' , app_config_1.default.hostName.veracode.eu );
+            host = app_config_1.default.hostName.veracode.eu;
+            vid = vid.split('-')[1] || '';
+            vkey = vkey.split('-')[1] || '';
+        }
+        else if (vid.startsWith('vera01fi')) {
+            console.log('US FED Instance' , app_config_1.default.hostName.veracode.fed );
+            host = app_config_1.default.hostName.veracode.fed;
+            vid = vid.split('-')[1] || '';
+            vkey = vkey.split('-')[1] || '';
+        }
+        // else if (vid.startsWith('vera01')) {
+        //     console.log('Commercial Instance' , app_config_1.default.hostName.veracode.us );
+        //     host = app_config_1.default.hostName.veracode.us;
+        //     vid = vid.split('-')[1] || '';
+        //     vkey = vkey.split('-')[1] || '';
+        // }
+        console.log('[DEBUG] ResourceURI: selfUserUri ', appConfig.api.veracode.selfUserUri);
+
         const getSelfUserDetailsResource = {
-            resourceUri: app_config_1.default.api.veracode.selfUserUri,
+            resourceUri: appConfig.api.veracode.selfUserUri,
             queryAttribute: '',
             queryValue: '',
         };
+        
+        console.log('[DEBUG]: getSelfUserDetailsResource', getSelfUserDetailsResource);
+
         const applicationResponse = await http.getResourceByAttribute(inputs.vid, inputs.vkey, getSelfUserDetailsResource);
+        console.log('[DEBUG]: applicationResponse', getSelfUserDetailsResource);
+
         if (applicationResponse && ((_a = applicationResponse === null || applicationResponse === void 0 ? void 0 : applicationResponse.api_credentials) === null || _a === void 0 ? void 0 : _a.expiration_ts)) {
             core.info(`VERACODE_API_ID and VERACODE_API_KEY is valid, Credentials expiration date - ${JSON.stringify(applicationResponse.api_credentials.expiration_ts)}`);
         }
         else {
+            console.log('[DEBUG]: Ran into an issue with the id and key, unkown');
+            core.info('[DEBUG]: There was an issue with the formatting of the Veracode API ID and Key');
             core.setFailed('Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY');
             annotations.push({
                 path: '/',

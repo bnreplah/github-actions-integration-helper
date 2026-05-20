@@ -50,6 +50,7 @@ async function getResourceByAttribute(vid, vkey, resource) {
     const queryAttribute1 = resource.queryAttribute1;
     const queryValue1 = resource.queryValue1;
     let host = app_config_1.default.hostName.veracode.us;
+
     if (vid.startsWith('vera01ei')) {
         console.log('EU Instance' , app_config_1.default.hostName.veracode.eu );
         host = app_config_1.default.hostName.veracode.eu;
@@ -100,11 +101,28 @@ async function deleteResourceById(vid, vkey, resource) {
     const resourceUri = resource.resourceUri;
     const resourceId = resource.resourceId;
     let host = app_config_1.default.hostName.veracode.us;
-    if (vid.startsWith('vera01ei-')) {
+    if (vid.startsWith('vera01ei')) {
+        console.log('EU Instance' , app_config_1.default.hostName.veracode.eu );
         host = app_config_1.default.hostName.veracode.eu;
         vid = vid.split('-')[1] || '';
         vkey = vkey.split('-')[1] || '';
     }
+    else if (vid.startsWith('vera01fi')) {
+        console.log('US FED Instance' , app_config_1.default.hostName.veracode.fed );
+        host = app_config_1.default.hostName.veracode.fed;
+        vid = vid.split('-')[1] || '';
+        vkey = vkey.split('-')[1] || '';
+    }
+    else if (vid.startsWith('vera01')) {
+        console.log('Commercial Instance' , app_config_1.default.hostName.veracode.us );
+        host = app_config_1.default.hostName.veracode.us;
+        vid = vid.split('-')[1] || '';
+        vkey = vkey.split('-')[1] || '';
+    }
+    else{
+        host = app_config_1.default.hostName.veracode.us;
+    }
+  
     const queryUrl = `${resourceUri}/${resourceId}`;
     const headers = {
         Authorization: (0, veracode_hmac_1.calculateAuthorizationHeader)({
@@ -143,6 +161,7 @@ async function postResourceByAttribute(vid, vkey, scanReport) {
         vid = vid.split('-')[1] || '';
         vkey = vkey.split('-')[1] || '';
     }
+
     else if (vid.startsWith('vera01')) {
         console.log('Commercial Instance' , app_config_1.default.hostName.veracode.us );
         host = app_config_1.default.hostName.veracode.us;
@@ -156,7 +175,7 @@ async function postResourceByAttribute(vid, vkey, scanReport) {
     
     console.log('Host: ', host);
     console.log('Resource URI: ', resourceUri);
-  
+
     const headers = {
         Authorization: (0, veracode_hmac_1.calculateAuthorizationHeader)({
             id: vid,
