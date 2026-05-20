@@ -220,11 +220,11 @@ async function validateVeracodeApiCreds(inputs) {
         console.log('[DEBUG]: on ');
     }
 
-    let host = appConfig.hostName.veracode.us;
+    let host = app_config_1.hostName.veracode.us;
     if (vid.startsWith('vera01fi')) {
         core.debug('FED prefix has been found');
     
-        host = appConfig.hostName.veracode.fed;
+        host = app_config_1.hostName.veracode.fed;
         //vid = vid.split('-')[1] || '';  // Extract part after '-'
         //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
     }
@@ -232,14 +232,14 @@ async function validateVeracodeApiCreds(inputs) {
         console.log('EU prefix has been sent');
         core.debug('EU prefix has been sent');
     
-        host = appConfig.hostName.veracode.eu;
+        host = app_config_1.hostName.veracode.eu;
         //vid = vid.split('-')[1] || '';  // Extract part after '-'
         //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
     }
     else (vid.startsWith('vera01')) {
     
         console.log('Unknown generic prefix found');
-        host = appConfig.hostName.veracode.eu;
+        host = app_config_1.hostName.veracode.eu;
         //vid = vid.split('-')[1] || '';  // Extract part after '-'
         //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
     }
@@ -288,10 +288,10 @@ async function validateVeracodeApiCreds(inputs) {
         //     vid = vid.split('-')[1] || '';
         //     vkey = vkey.split('-')[1] || '';
         // }
-        console.log('[DEBUG] ResourceURI: selfUserUri ', appConfig.api.veracode.selfUserUri);
+        console.log('[DEBUG] ResourceURI: selfUserUri ', app_config_1.api.veracode.selfUserUri);
 
         const getSelfUserDetailsResource = {
-            resourceUri: appConfig.api.veracode.selfUserUri,
+            resourceUri: app_config_1.api.veracode.selfUserUri,
             queryAttribute: '',
             queryValue: '',
         };
