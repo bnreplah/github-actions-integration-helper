@@ -262,10 +262,10 @@ async function validateVeracodeApiCreds(inputs) {
         //     vid = vid.split('-')[1] || '';
         //     vkey = vkey.split('-')[1] || '';
         // }
-        console.log('[DEBUG] ResourceURI: selfUserUri ', appConfig.api.veracode.selfUserUri);
+        console.log('[DEBUG] ResourceURI: selfUserUri ', app_config_1.api.veracode.selfUserUri);
 
         const getSelfUserDetailsResource = {
-            resourceUri: appConfig.api.veracode.selfUserUri,
+            resourceUri: app_config_1.api.veracode.selfUserUri,
             queryAttribute: '',
             queryValue: '',
         };
