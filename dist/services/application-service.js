@@ -281,16 +281,16 @@ async function validateVeracodeApiCreds(inputs) {
         else {
             console.log('[DEBUG]: Ran into an issue with the id and key, unkown');
             core.info('[DEBUG]: There was an issue with the formatting of the Veracode API ID and Key');
-            core.setFailed('Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY');
+            core.setFailed('Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY');
             annotations.push({
                 path: '/',
                 start_line: 0,
                 end_line: 0,
                 annotation_level: 'failure',
-                title: 'Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.',
+                title: 'Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.',
                 message: 'Please check the VERACODE_API_ID and VERACODE_API_KEY configured under the organization secrets.',
             });
-            await (0, check_service_1.updateChecks)(octokit, checkStatic, Checks.Conclusion.Failure, annotations, 'Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.');
+            await (0, check_service_1.updateChecks)(octokit, checkStatic, Checks.Conclusion.Failure, annotations, 'Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.');
             return;
         }
         return (_b = applicationResponse === null || applicationResponse === void 0 ? void 0 : applicationResponse.api_credentials) === null || _b === void 0 ? void 0 : _b.expiration_ts;
