@@ -170,6 +170,36 @@ async function validateVeracodeApiCreds(inputs) {
         check_run_id: inputs.check_run_id,
         status: Checks.Status.Completed,
     };
+
+    let host = appConfig.hostName.veracode.us;
+    if (vid.startsWith('vera01fi')) {
+        core.debug('FED prefix has been found');
+    
+        host = appConfig.hostName.veracode.fed;
+        //vid = vid.split('-')[1] || '';  // Extract part after '-'
+        //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+     }
+     else if (vid.startsWith('vera01ei')) {
+        console.log('EU prefix has been sent');
+        core.debug('EU prefix has been sent');
+    
+        host = appConfig.hostName.veracode.eu;
+        //vid = vid.split('-')[1] || '';  // Extract part after '-'
+        //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+     }
+     else (vid.startsWith('vera01')) {
+    
+        console.log('Unknown generic prefix found');
+        host = appConfig.hostName.veracode.eu;
+        //vid = vid.split('-')[1] || '';  // Extract part after '-'
+        //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+     }
+     console.log('Host: ', host);
+
+  
+
+
+    
     try {
         if (!inputs.vid || !inputs.vkey) {
             core.setFailed('Missing VERACODE_API_ID / VERACODE_API_KEY secret key.');
@@ -194,16 +224,16 @@ async function validateVeracodeApiCreds(inputs) {
             core.info(`VERACODE_API_ID and VERACODE_API_KEY is valid, Credentials expiration date - ${JSON.stringify(applicationResponse.api_credentials.expiration_ts)}`);
         }
         else {
-            core.setFailed('Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY');
+            core.setFailed('Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY');
             annotations.push({
                 path: '/',
                 start_line: 0,
                 end_line: 0,
                 annotation_level: 'failure',
-                title: 'Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.',
+                title: 'Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.',
                 message: 'Please check the VERACODE_API_ID and VERACODE_API_KEY configured under the organization secrets.',
             });
-            await (0, check_service_1.updateChecks)(octokit, checkStatic, Checks.Conclusion.Failure, annotations, 'Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.');
+            await (0, check_service_1.updateChecks)(octokit, checkStatic, Checks.Conclusion.Failure, annotations, 'Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.');
             return;
         }
         return (_b = applicationResponse === null || applicationResponse === void 0 ? void 0 : applicationResponse.api_credentials) === null || _b === void 0 ? void 0 : _b.expiration_ts;
