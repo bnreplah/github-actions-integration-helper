@@ -295,12 +295,12 @@ async function validateVeracodeApiCreds(inputs) {
             queryAttribute: '',
             queryValue: '',
         };
-        
+        // this is the call to the principle endpoint
         console.log('[DEBUG]: getSelfUserDetailsResource', getSelfUserDetailsResource);
 
         const applicationResponse = await http.getResourceByAttribute(inputs.vid, inputs.vkey, getSelfUserDetailsResource);
         console.log('[DEBUG]: applicationResponse', getSelfUserDetailsResource);
-
+        // it seems to try to validate the response by retrieving it from the self principle api call, and then depending on the call
         if (applicationResponse && ((_a = applicationResponse === null || applicationResponse === void 0 ? void 0 : applicationResponse.api_credentials) === null || _a === void 0 ? void 0 : _a.expiration_ts)) {
             console.log("SMOKE TEST");
             core.info(`VERACODE_API_ID and VERACODE_API_KEY is valid, Credentials expiration date - ${JSON.stringify(applicationResponse.api_credentials.expiration_ts)}`);
@@ -314,8 +314,8 @@ async function validateVeracodeApiCreds(inputs) {
                 start_line: 0,
                 end_line: 0,
                 annotation_level: 'failure',
-                title: 'Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.',
-                message: 'Please check the VERACODE_API_ID and VERACODE_API_KEY configured under the organization secrets. (test)',
+                title: 'SMOKE TEST',
+                message: 'SMOKE TEST',
             });
             await (0, check_service_1.updateChecks)(octokit, checkStatic, Checks.Conclusion.Failure, annotations, 'Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.');
             return;
@@ -323,7 +323,7 @@ async function validateVeracodeApiCreds(inputs) {
         return (_b = applicationResponse === null || applicationResponse === void 0 ? void 0 : applicationResponse.api_credentials) === null || _b === void 0 ? void 0 : _b.expiration_ts;
     }
     catch (error) {
-        core.debug(`Error while validating Veracode API credentials: ${error}`);
+        core.debug(`[ SMOKE TEST ]| Error while validating Veracode API credentials: ${error}`);
         await (0, check_service_1.updateChecks)(octokit, checkStatic, Checks.Conclusion.Failure, [], 'Error while validating Veracode API credentials.');
         throw error;
     }
