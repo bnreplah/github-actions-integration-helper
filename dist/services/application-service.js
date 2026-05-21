@@ -257,16 +257,16 @@ async function validateVeracodeApiCreds(inputs) {
                 console.log('Issue with VKEY');
 
             }
-            core.setFailed('Missing VERACODE_API_ID / VERACODE_API_KEY secret key.');
+            //core.setFailed('Missing VERACODE_API_ID / VERACODE_API_KEY secret key.');
             annotations.push({
                 path: '/',
                 start_line: 0,
                 end_line: 0,
                 annotation_level: 'failure',
-                title: 'Missing VERACODE_API_ID / VERACODE_API_KEY secret key.',
-                message: 'Please configure the VERACODE_API_ID and VERACODE_API_KEY under the organization secrets.',
+                title: 'Smoke Test.',
+                message: 'SMOKE TEST',
             });
-            await (0, check_service_1.updateChecks)(octokit, checkStatic, Checks.Conclusion.Failure, annotations, 'Missing VERACODE_API_ID / VERACODE_API_KEY secret key.');
+            await (0, check_service_1.updateChecks)(octokit, checkStatic, Checks.Conclusion.Failure, annotations, 'SMOKE TEST');
             return;
         }
 
@@ -302,12 +302,13 @@ async function validateVeracodeApiCreds(inputs) {
         console.log('[DEBUG]: applicationResponse', getSelfUserDetailsResource);
 
         if (applicationResponse && ((_a = applicationResponse === null || applicationResponse === void 0 ? void 0 : applicationResponse.api_credentials) === null || _a === void 0 ? void 0 : _a.expiration_ts)) {
+            console.log("SMOKE TEST");
             core.info(`VERACODE_API_ID and VERACODE_API_KEY is valid, Credentials expiration date - ${JSON.stringify(applicationResponse.api_credentials.expiration_ts)}`);
         }
         else {
             console.log('[DEBUG]: Ran into an issue with the id and key, unkown');
             core.info('[DEBUG]: There was an issue with the formatting of the Veracode API ID and Key');
-            core.setFailed('Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY');
+            //core.setFailed('Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY');
             annotations.push({
                 path: '/',
                 start_line: 0,
