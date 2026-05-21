@@ -3,7 +3,8 @@ name: Veracode Security Scan
 on: 
   pull_request:
     branches:
-      - master
+      - main
+      - Fedramp
   schedule:
     - cron: 0 4 * * *
   workflow_dispatch:
