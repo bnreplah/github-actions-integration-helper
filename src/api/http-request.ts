@@ -27,12 +27,12 @@ export async function getResourceByAttribute<T>(vid: string, vkey: string, resou
     vid = vid.split('-')[1] || '';  // Extract part after '-'
     vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
-  else if (vid.startsWith('vera01fi')) {
-    host = appConfig.hostName.veracode.fed;
+  else if (vid.startsWith('vera01')) {
+    host = appConfig.hostName.veracode.us;
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // wondering if this is needed for fedramp ? got a 401      
-    //vid = vid.split('-')[1] || '';  // Extract part after '-' 
-    //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+    vid = vid.split('-')[1] || '';  // Extract part after '-' 
+    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   let urlQueryParams = queryAttribute !== '' ? `?${queryAttribute}=${queryValue}` : '';
   if (queryAttribute1) {
@@ -67,10 +67,10 @@ export async function deleteResourceById(vid: string, vkey: string, resource: Re
     vid = vid.split('-')[1] || '';  // Extract part after '-'
     vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
-  else if (vid.startsWith('vera01fi')) {
-    host = appConfig.hostName.veracode.fed;
-    //vid = vid.split('-')[1] || '';  // Extract part after '-'
-    //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+  else if (vid.startsWith('vera01')) {
+    host = appConfig.hostName.veracode.us;
+    vid = vid.split('-')[1] || '';  // Extract part after '-'
+    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   const queryUrl = `${resourceUri}/${resourceId}`;
   const headers = {
@@ -99,10 +99,10 @@ export async function postResourceByAttribute<T>(vid: string, vkey: string, scan
     vid = vid.split('-')[1] || '';  // Extract part after '-'
     vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
-  else if (vid.startsWith('vera01fi')) {
-    host = appConfig.hostName.veracode.fed;
-    //vid = vid.split('-')[1] || '';  // Extract part after '-'
-    //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+  else if (vid.startsWith('vera01')) {
+    host = appConfig.hostName.veracode.us;
+    vid = vid.split('-')[1] || '';  // Extract part after '-'
+    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   const headers = {
     Authorization: calculateAuthorizationHeader({
