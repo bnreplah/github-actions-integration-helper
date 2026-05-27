@@ -161,24 +161,24 @@ export async function validateVeracodeApiCreds(inputs: Inputs): Promise<string |
   if (vid.startsWith('vera01fi')) {
     core.debug('FED prefix has been found');
 
-    host = appConfig.hostName.veracode.fed;
-    //vid = vid.split('-')[1] || '';  // Extract part after '-'
-    //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+    host = appConfig.hostName.veracode.us;
+    vid = vid.split('-')[1] || '';  // Extract part after '-'
+    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   else if (vid.startsWith('vera01ei')) {
-    console.log('EU prefix has been sent');
-    core.debug('EU prefix has been sent');
+    console.log('EU prefix has been detected');
+    core.debug('EU prefix has been detected');
 
     host = appConfig.hostName.veracode.eu;
-    //vid = vid.split('-')[1] || '';  // Extract part after '-'
-    //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+    vid = vid.split('-')[1] || '';  // Extract part after '-'
+    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
-  else (vid.startsWith('vera01')) {
+  else if (vid.startsWith('vera01')) {
 
     console.log('Unknown generic prefix found');
-    host = appConfig.hostName.veracode.eu;
-    //vid = vid.split('-')[1] || '';  // Extract part after '-'
-    //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+    host = appConfig.hostName.veracode.us;
+    vid = vid.split('-')[1] || '';  // Extract part after '-'
+    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   console.log('Host: ', host);
 
