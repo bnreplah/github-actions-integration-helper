@@ -3,7 +3,6 @@ interface AppConfig {
         veracode: {
             us: string;
             eu: string;
-            fed: string;
         };
         github: string;
     };
