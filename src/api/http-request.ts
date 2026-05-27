@@ -29,8 +29,10 @@ export async function getResourceByAttribute<T>(vid: string, vkey: string, resou
   }
   else if (vid.startsWith('vera01fi')) {
     host = appConfig.hostName.veracode.fed;
-    vid = vid.split('-')[1] || '';  // Extract part after '-'
-    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // wondering if this is needed for fedramp ? got a 401      
+    //vid = vid.split('-')[1] || '';  // Extract part after '-' 
+    //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   let urlQueryParams = queryAttribute !== '' ? `?${queryAttribute}=${queryValue}` : '';
   if (queryAttribute1) {
@@ -67,8 +69,8 @@ export async function deleteResourceById(vid: string, vkey: string, resource: Re
   }
   else if (vid.startsWith('vera01fi')) {
     host = appConfig.hostName.veracode.fed;
-    vid = vid.split('-')[1] || '';  // Extract part after '-'
-    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+    //vid = vid.split('-')[1] || '';  // Extract part after '-'
+    //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   const queryUrl = `${resourceUri}/${resourceId}`;
   const headers = {
@@ -99,8 +101,8 @@ export async function postResourceByAttribute<T>(vid: string, vkey: string, scan
   }
   else if (vid.startsWith('vera01fi')) {
     host = appConfig.hostName.veracode.fed;
-    vid = vid.split('-')[1] || '';  // Extract part after '-'
-    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+    //vid = vid.split('-')[1] || '';  // Extract part after '-'
+    //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   const headers = {
     Authorization: calculateAuthorizationHeader({
