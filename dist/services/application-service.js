@@ -244,24 +244,12 @@ async function validateVeracodeApiCreds(inputs) {
             return;
         }
 
-        if (inputs.vid.startsWith('vera01ei')) {
-            console.log('EU Instance' , app_config_1.default.hostName.veracode.eu );
-            host = app_config_1.default.hostName.veracode.eu;
-            vid = vid.split('-')[1] || '';
-            vkey = vkey.split('-')[1] || '';
+        if (vid.startsWith('vera01')) {
+             console.log('Commercial Instance' , app_config_1.default.hostName.veracode.us );
+             host = app_config_1.default.hostName.veracode.us;
+             vid = vid.split('-')[1] || '';
+             vkey = vkey.split('-')[1] || '';
         }
-        else if (vid.startsWith('vera01fi')) {
-            console.log('US FED Instance' , app_config_1.default.hostName.veracode.fed );
-            host = app_config_1.default.hostName.veracode.fed;
-            vid = vid.split('-')[1] || '';
-            vkey = vkey.split('-')[1] || '';
-        }
-        // else if (vid.startsWith('vera01')) {
-        //     console.log('Commercial Instance' , app_config_1.default.hostName.veracode.us );
-        //     host = app_config_1.default.hostName.veracode.us;
-        //     vid = vid.split('-')[1] || '';
-        //     vkey = vkey.split('-')[1] || '';
-        // }
         console.log('[DEBUG] ResourceURI: selfUserUri ', app_config_1.api.veracode.selfUserUri);
 
         const getSelfUserDetailsResource = {
