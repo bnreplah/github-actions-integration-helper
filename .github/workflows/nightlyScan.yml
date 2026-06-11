@@ -45,6 +45,6 @@ jobs:
           appname: 'GitHub Action Integrations Helper'
           createprofile: true
           filepath: 'app.zip'
-          scantimeout: 30
+          #scantimeout: 30
           vid: '${{ secrets.API_ID }}'
           vkey: '${{ secrets.API_KEY }}'
