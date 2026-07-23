@@ -22,12 +22,7 @@ export async function getResourceByAttribute<T>(vid: string, vkey: string, resou
   const queryAttribute1 = resource.queryAttribute1;
   const queryValue1 = resource.queryValue1;
   let host = appConfig.hostName.veracode.us;
-  if (vid.startsWith('vera01ei-')) {
-    host = appConfig.hostName.veracode.eu;
-    vid = vid.split('-')[1] || '';  // Extract part after '-'
-    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
-  }
-  else if (vid.startsWith('vera01')) {
+  if (vid.startsWith('vera01')) {
     host = appConfig.hostName.veracode.us;
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // wondering if this is needed for fedramp ? got a 401      
@@ -62,12 +57,7 @@ export async function deleteResourceById(vid: string, vkey: string, resource: Re
   const resourceUri = resource.resourceUri;
   const resourceId = resource.resourceId;
   let host = appConfig.hostName.veracode.us;
-  if (vid.startsWith('vera01ei-')) {
-    host = appConfig.hostName.veracode.eu;
-    vid = vid.split('-')[1] || '';  // Extract part after '-'
-    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
-  }
-  else if (vid.startsWith('vera01')) {
+  if (vid.startsWith('vera01')) {
     host = appConfig.hostName.veracode.us;
     vid = vid.split('-')[1] || '';  // Extract part after '-'
     vkey = vkey.split('-')[1] || ''; // Extract part after '-'
@@ -94,12 +84,7 @@ export async function deleteResourceById(vid: string, vkey: string, resource: Re
 export async function postResourceByAttribute<T>(vid: string, vkey: string, scanReport: string): Promise<T> {
   const resourceUri = appConfig.api.veracode.relayServiceUri;
   let host = appConfig.hostName.veracode.us;
-  if (vid.startsWith('vera01ei')) {
-    host = appConfig.hostName.veracode.fed;
-    vid = vid.split('-')[1] || '';  // Extract part after '-'
-    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
-  }
-  else if (vid.startsWith('vera01')) {
+  if (vid.startsWith('vera01')) {
     host = appConfig.hostName.veracode.us;
     vid = vid.split('-')[1] || '';  // Extract part after '-'
     vkey = vkey.split('-')[1] || ''; // Extract part after '-'
