@@ -31,8 +31,8 @@ export async function getResourceByAttribute<T>(vid: string, vkey: string, resou
     host = appConfig.hostName.veracode.fed;
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // wondering if this is needed for fedramp ? got a 401      
-    //vid = vid.split('-')[1] || '';  // Extract part after '-' 
-    //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+    vid = vid.split('-')[1] || '';  // Extract part after '-' 
+    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   let urlQueryParams = queryAttribute !== '' ? `?${queryAttribute}=${queryValue}` : '';
   if (queryAttribute1) {
