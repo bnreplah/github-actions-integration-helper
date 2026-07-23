@@ -69,8 +69,8 @@ export async function deleteResourceById(vid: string, vkey: string, resource: Re
   }
   else if (vid.startsWith('vera01fi')) {
     host = appConfig.hostName.veracode.fed;
-    //vid = vid.split('-')[1] || '';  // Extract part after '-'
-    //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+    vid = vid.split('-')[1] || '';  // Extract part after '-'
+    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   const queryUrl = `${resourceUri}/${resourceId}`;
   const headers = {
