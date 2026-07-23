@@ -157,8 +157,8 @@ export async function validateVeracodeApiCreds(inputs: Inputs): Promise<string |
     status: Checks.Status.Completed,
   };
 
-  let host = appConfig.hostName.veracode.us;
   if (vid.startsWith('vera01fi')) {
+    console.log('FedRAMP Instance');
     core.debug('FED prefix has been found');
 
     host = appConfig.hostName.veracode.fed;
@@ -166,19 +166,21 @@ export async function validateVeracodeApiCreds(inputs: Inputs): Promise<string |
     //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   else if (vid.startsWith('vera01ei')) {
-    console.log('EU prefix has been sent');
+    console.log('EU Instance');
     core.debug('EU prefix has been sent');
 
     host = appConfig.hostName.veracode.eu;
     //vid = vid.split('-')[1] || '';  // Extract part after '-'
     //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
-  else (vid.startsWith('vera01')) {
-
-    console.log('Unknown generic prefix found');
+  else if (vid.startsWith('vera01')) {
+    console.log('Commercial Instance');
     host = appConfig.hostName.veracode.eu;
     //vid = vid.split('-')[1] || '';  // Extract part after '-'
     //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+  }
+  else {
+    console.log('Default to Commercial Instance');
   }
   console.log('Host: ', host);
 
@@ -208,25 +210,24 @@ export async function validateVeracodeApiCreds(inputs: Inputs): Promise<string |
       queryAttribute: '',
       queryValue: '',
     };
-    core.debug(`resourceUri: ${resourceUri}`)
+    core.debug(`resourceUri: ${getSelfUserDetailsResource.resourceUri}`);
 
     const applicationResponse: VeracodeApplication.SelfUserResultsData =
       await http.getResourceByAttribute<VeracodeApplication.SelfUserResultsData>(inputs.vid, inputs.vkey, getSelfUserDetailsResource);
 
     if (applicationResponse && applicationResponse?.api_credentials?.expiration_ts) {
       core.info(`VERACODE_API_ID and VERACODE_API_KEY is valid, Credentials expiration date - ${JSON.stringify(applicationResponse.api_credentials.expiration_ts)}`);
-    } 
+    }
     else {
       core.debug(`[DEBUG]: Host Identified: ${host}`);
       core.setFailed('Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY');
-
+      annotations.push({
         path: '/',
         start_line: 0,
         end_line: 0,
         annotation_level: 'failure',
         title: 'Unknown/Invalid/Expired VERACODE_API_ID and VERACODE_API_KEY.',
         message: `[ERROR]: There was something that went wrong with your API ID and Key\nPlease check the VERACODE_API_ID and VERACODE_API_KEY configured under the veracode repository secrets, or your organization secrets.\nHost: ${host}`,
-
       });
       await updateChecks(
         octokit,

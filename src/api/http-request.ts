@@ -23,14 +23,21 @@ export async function getResourceByAttribute<T>(vid: string, vkey: string, resou
   const queryValue1 = resource.queryValue1;
   let host = appConfig.hostName.veracode.us;
   if (vid.startsWith('vera01ei-')) {
+    console.log('EU Instance');
     host = appConfig.hostName.veracode.eu;
     vid = vid.split('-')[1] || '';  // Extract part after '-'
     vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   else if (vid.startsWith('vera01fi')) {
+    console.log('FedRAMP Instance');
     host = appConfig.hostName.veracode.fed;
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // wondering if this is needed for fedramp ? got a 401
     vid = vid.split('-')[1] || '';  // Extract part after '-'
     vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+  }
+  else {
+    console.log('Commercial Instance');
   }
   let urlQueryParams = queryAttribute !== '' ? `?${queryAttribute}=${queryValue}` : '';
   if (queryAttribute1) {
@@ -61,14 +68,19 @@ export async function deleteResourceById(vid: string, vkey: string, resource: Re
   const resourceId = resource.resourceId;
   let host = appConfig.hostName.veracode.us;
   if (vid.startsWith('vera01ei-')) {
+    console.log('EU Instance');
     host = appConfig.hostName.veracode.eu;
     vid = vid.split('-')[1] || '';  // Extract part after '-'
     vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   else if (vid.startsWith('vera01fi')) {
+    console.log('FedRAMP Instance');
     host = appConfig.hostName.veracode.fed;
     vid = vid.split('-')[1] || '';  // Extract part after '-'
     vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+  }
+  else {
+    console.log('Commercial Instance');
   }
   const queryUrl = `${resourceUri}/${resourceId}`;
   const headers = {
@@ -93,14 +105,19 @@ export async function postResourceByAttribute<T>(vid: string, vkey: string, scan
   const resourceUri = appConfig.api.veracode.relayServiceUri;
   let host = appConfig.hostName.veracode.us;
   if (vid.startsWith('vera01ei')) {
+    console.log('EU Instance');
     host = appConfig.hostName.veracode.fed;
     vid = vid.split('-')[1] || '';  // Extract part after '-'
     vkey = vkey.split('-')[1] || ''; // Extract part after '-'
   }
   else if (vid.startsWith('vera01fi')) {
+    console.log('FedRAMP Instance');
     host = appConfig.hostName.veracode.fed;
-    vid = vid.split('-')[1] || '';  // Extract part after '-'
-    vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+    //vid = vid.split('-')[1] || '';  // Extract part after '-'
+    //vkey = vkey.split('-')[1] || ''; // Extract part after '-'
+  }
+  else {
+    console.log('Commercial Instance');
   }
   const headers = {
     Authorization: calculateAuthorizationHeader({
